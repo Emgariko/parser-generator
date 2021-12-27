@@ -1,0 +1,13 @@
+@grammar test;
+
+@terminals
+    EPS: "EPS";
+    LB: "(";
+    RB: ")";
+
+@start: s;
+
+@rules
+    s: LB s RB |
+       s s |
+       EPS;

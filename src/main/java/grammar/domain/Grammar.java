@@ -6,6 +6,7 @@ import java.util.List;
 public class Grammar {
     private String name;
     private final List<Terminal> terminals = new ArrayList<>();
+    private final List<Nonterminal> nonterms = new ArrayList<>();
     private String startName;
 
     public Grammar() {
@@ -18,6 +19,10 @@ public class Grammar {
 
     public void addTerminal(String name, String rule) {
         terminals.add(new Terminal(name, rule));
+    }
+
+    public void addNonterminal(Nonterminal nonterm) {
+        nonterms.add(nonterm);
     }
 
     public void setStartName(String name) {

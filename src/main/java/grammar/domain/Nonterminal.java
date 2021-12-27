@@ -1,10 +1,13 @@
 package grammar.domain;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Nonterminal {
     private String name;
+    private List<Rule> rules = new ArrayList<>();
     private List<Param> params = new ArrayList<>();
     private List<Param> rets = new ArrayList();
 
@@ -20,6 +23,10 @@ public class Nonterminal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addRule(Rule rule) {
+        rules.add(rule);
     }
 
     public void addParam(String type, String name) {
