@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Grammar {
     private String name;
-    private final List<Terminal> terminals = new ArrayList<>();
-    private final List<Nonterminal> nonterms = new ArrayList<>();
+    private final ArrayList<Terminal> terminals = new ArrayList<>();
+    private final ArrayList<Nonterminal> nonterms = new ArrayList<>();
     private String startName;
 
     public Grammar() {
@@ -27,5 +27,13 @@ public class Grammar {
 
     public void setStartName(String name) {
         startName = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Terminal> getTerminals() {
+        return terminals;
     }
 }

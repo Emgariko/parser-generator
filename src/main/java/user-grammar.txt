@@ -2,8 +2,8 @@
 
 @terminals
     EPS: "EPS";
-    LB: "(";
-    RB: ")";
+    LB: "\\(";
+    RB: "\\)";
 
 @start: s;
 

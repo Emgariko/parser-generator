@@ -1,7 +1,6 @@
 package parser;
 
 import parser.exception.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

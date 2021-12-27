@@ -8,4 +8,12 @@ public class Terminal {
         this.name = name;
         this.regex = regex;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getRegex() {
+        return regex;
+    }
 }
