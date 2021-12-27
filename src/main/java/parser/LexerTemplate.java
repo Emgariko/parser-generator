@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Lexer {
+public class LexerTemplate {
     private final StringBuilder input;
     private Token curToken = null;
     private final List<TokenPattern> order = new ArrayList<>();
-    /*private*/ public final Matcher matcher;
+    private final Matcher matcher;
 
     public enum Token {
         EPS, LB, RB, END;
@@ -30,25 +30,23 @@ public class Lexer {
     public static class TokenPattern {
         Token token;
         Pattern pattern;
-        private boolean skip;
 
-        public TokenPattern(Token token, Pattern pattern, boolean skip) {
+        public TokenPattern(Token token, Pattern pattern) {
             this.token = token;
             this.pattern = pattern;
-            this.skip = false;
         }
     }
 
-    private void addToken(Token token, Pattern pattern, boolean skip) {
-        order.add(new TokenPattern(token, pattern, skip));
+    private void addToken(Token token, Pattern pattern) {
+        order.add(new TokenPattern(token, pattern));
     }
 
-    public Lexer(String input) {
+    public LexerTemplate(String input) {
         this.input = new StringBuilder(input);
 
-        addToken(Token.EPS, Pattern.compile("EPS"), false);
-        addToken(Token.LB, Pattern.compile("\\("), false);
-        addToken(Token.RB, Pattern.compile("\\)"), false);
+        addToken(Token.EPS, Pattern.compile("EPS"));
+        addToken(Token.LB, Pattern.compile("\\("));
+        addToken(Token.RB, Pattern.compile("\\)"));
         matcher = order.get(0).pattern.matcher(input);
     }
 

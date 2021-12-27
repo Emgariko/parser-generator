@@ -1,13 +1,7 @@
-import grammar.domain.Grammar;
-import grammar.parser.GrammarLexer;
-import grammar.parser.GrammarParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import parser.Lexer;
+import parser.LexerTemplate;
 import parser.exception.ParseException;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -18,12 +12,12 @@ public class Main {
         GrammarParser.GramContext example = grammarParser.gram(g);
         var t = g.getClass();*/
         String test = "()()(())";
-        Lexer lexer = new Lexer(test);
+        LexerTemplate lexerTemplate = new LexerTemplate(test);
         try {
-            Lexer.Token token = lexer.nextToken();
-            while (lexer.hasNext()) {
+            LexerTemplate.Token token = lexerTemplate.nextToken();
+            while (lexerTemplate.hasNext()) {
                 System.out.println(token);
-                token = lexer.nextToken();
+                token = lexerTemplate.nextToken();
             }
         } catch (ParseException e) {
             e.printStackTrace();
