@@ -1,15 +1,21 @@
 package grammar.domain;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Nonterminal {
     private String name;
-    private List<Rule> rules = new ArrayList<>();
+    private ArrayList<Rule> rules = new ArrayList<>();
     private List<Param> params = new ArrayList<>();
     private List<Param> rets = new ArrayList();
+    public final Set<Terminal> first = new HashSet<>();
+    public final Set<Terminal> follow = new HashSet<>();
+
+    public String getName() {
+        return name;
+    }
 
     public static class Param {
         public final String type;
@@ -35,5 +41,9 @@ public class Nonterminal {
 
     public void addRet(String type, String name) {
         rets.add(new Param(type, name));
+    }
+
+    public ArrayList<Rule> getRules() {
+        return rules;
     }
 }

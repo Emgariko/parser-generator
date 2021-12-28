@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rule {
-    private final List<Element> els = new ArrayList<>();
+    private final ArrayList<Element> els = new ArrayList<>();
 
     public static class Element {
         public final String name;
@@ -16,6 +16,10 @@ public class Rule {
             this.params = params;
             this.code = code;
         }
+    }
+
+    public ArrayList<Element> getEls() {
+        return els;
     }
 
     public void addElement(String name, String params, String code) {

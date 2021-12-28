@@ -4,10 +4,21 @@
     EPS: "EPS";
     LB: "\\(";
     RB: "\\)";
+    VBAR: "\\|";
+    L: "[a-zA-Z]";
+    STAR: "\\*";
 
-@start: s;
+@start: r;
 
 @rules
-    s: LB s RB |
-       s s |
-       EPS;
+    r: u r_;
+    r_: VBAR u r_ |
+        EPS;
+    u: c u_;
+    u_: c u_ |
+        EPS;
+    c: k c_;
+    c_: STAR c_ |
+        EPS;
+    k: LB r RB |
+        L;

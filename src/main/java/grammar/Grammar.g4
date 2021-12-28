@@ -40,7 +40,7 @@ nonterminal returns [Nonterminal nonterm]
     ('returns' '[' nonterminal_returns[$nonterm] ']')?
     ':' r1=nonterm_rule {$nonterm.addRule($r1.r);}
     ('|' ((r2=nonterm_rule {$nonterm.addRule($r2.r);}) |
-     ({$nonterm.addRule(null);}))
+     ({$nonterm.addRule(null);})) // :TODO: don't forget this case
      )* ';';
 
 nonterminal_params[Nonterminal nonterm]:
