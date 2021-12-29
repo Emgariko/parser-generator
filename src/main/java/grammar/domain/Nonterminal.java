@@ -50,4 +50,8 @@ public class Nonterminal {
     public ArrayList<Rule> getRules() {
         return rules;
     }
+
+    public ArrayList<Param> getParams() {
+        return params;
+    }
 }
