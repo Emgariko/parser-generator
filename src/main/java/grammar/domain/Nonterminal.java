@@ -8,8 +8,8 @@ import java.util.Set;
 public class Nonterminal {
     private String name;
     private ArrayList<Rule> rules = new ArrayList<>();
-    private List<Param> params = new ArrayList<>();
-    private List<Param> rets = new ArrayList();
+    private ArrayList<Param> params = new ArrayList<>();
+    private ArrayList<Param> rets = new ArrayList();
     public final Set<Terminal> first = new HashSet<>();
     public final Set<Terminal> follow = new HashSet<>();
 
@@ -41,6 +41,10 @@ public class Nonterminal {
 
     public void addRet(String type, String name) {
         rets.add(new Param(type, name));
+    }
+
+    public ArrayList<Param> getRets() {
+        return rets;
     }
 
     public ArrayList<Rule> getRules() {

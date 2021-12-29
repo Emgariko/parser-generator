@@ -81,6 +81,7 @@ public class LexerGenerator {
                 "    private Token curToken = null;\n" +
                 "    private final List<TokenPattern> order = new ArrayList<>();\n" +
                 "    private final Matcher matcher;\n" +
+                "    private final Pattern wsPattern = Pattern.compile(\"\\\\s\");" +
                 "\n" +
                 "%3$s" + // enum Token
                 "\n" +
@@ -107,11 +108,18 @@ public class LexerGenerator {
                 "    }\n" +
                 "\n" +
                 "    public Token nextToken() throws ParseException {\n" +
-                "        if (input.length() == 0) {\n" +
-                "            curToken = Token.END;\n" +
-                "            return curToken;\n" +
-                "        }\n" +
                 "        for (TokenPattern tokenPattern : order) {\n" +
+                "            if (input.length() == 0) {\n" +
+                "                curToken = Token.END;\n" +
+                "                return curToken;\n" +
+                "            }\n" +
+                "            matcher.usePattern(wsPattern);\n" +
+                "            if (matcher.lookingAt()) {\n" +
+                "                input.delete(0, matcher.end());\n" +
+                "                matcher.reset(input);\n" +
+                "                continue;\n" +
+                "            }\n" +
+                "\n" +
                 "            matcher.usePattern(tokenPattern.pattern);\n" +
                 "            if (matcher.lookingAt()) {\n" +
                 "                String parsed = matcher.group();\n" +
@@ -183,7 +191,6 @@ public class LexerGenerator {
                     , term.getName(), term.getRegex()));
             addTokens.append("\n");
         }
-
 
         res.append(
                 String.format(

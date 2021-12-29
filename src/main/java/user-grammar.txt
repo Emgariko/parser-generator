@@ -11,8 +11,8 @@
 @start: r;
 
 @rules
-    r: u r_;
-    r_: VBAR u r_ |
+    r returns[int x]: u r_;
+    r_ returns[int x, int y]: VBAR u r_ |
         EPS;
     u: c u_;
     u_: c u_ |
