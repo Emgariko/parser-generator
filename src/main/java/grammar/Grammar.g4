@@ -1,8 +1,6 @@
 grammar Grammar;
 
-// grammar to parse an user-defined grammar
-
-// :TODO: init method in nonterminal?
+// grammar to parse a user-defined grammar
 
 @header {
 import grammar.domain.*;
@@ -71,42 +69,14 @@ rule_code returns[String s] locals[StringBuilder res]:
 // :TODO: may be use '#' '#' insted of '{' '}'
     SOURCE_CODE {
         $res = new StringBuilder($SOURCE_CODE.text);
-        $res.deleteCharAt($s.length() - 1);
+        $res.deleteCharAt($res.length() - 1);
         $res.deleteCharAt(0);
         $s = $res.toString();
     };
-
-// regexps grammar
-/*reg_exp:
-    reg_exp_u reg_exp_r_;
-
-reg_exp_r_:
-    '|' reg_exp_u reg_exp_r_
-    |;
-
-reg_exp_u:
-    reg_exp_c reg_exp_u_;
-
-reg_exp_u_:
-    reg_exp_c reg_exp_u_
-    |;
-
-reg_exp_c:
-    reg_exp_k reg_exp_c_;
-
-reg_exp_c_:
-    '*'
-    |;
-
-reg_exp_k: // Kleene star
-    ('(' reg_exp ')') |
-    (WORD);
-    // :TODO: add alternative*/
 
 SKIP_WHITESPACES: [ \n\r\t]+ -> skip;
 INT: [0-9]+;
 NAME: [a-zA-Z][a-zA-Z0-9_]*;
 
-// :TODO: remove first and last characters '\''
 REGEXP: '"' (~('"'))* '"';
 SOURCE_CODE: '#' (~('#'))+ '#';

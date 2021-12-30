@@ -143,8 +143,7 @@ public class Grammar {
         }
     }
 
-    // :TODO: There are should be the only one EPS terminal.
-    // :TODO: if two different terminals have equal regex and different name ?
+    // :TODO: There should be the only one EPS terminal.
     public HashSet<Terminal> calcRuleFirst(Rule rule, int ind) {
         HashSet<Terminal> res = new HashSet<>();
         ArrayList<Rule.Element> els = rule.getEls();

@@ -18,7 +18,6 @@ public class ParserGenerator {
     private LexerGenerator lexerGenerator;
     private final String pathPrefix = "src/main/java";
 
-    // :TODO: if there is no EPS term in user grammar then it should be mocked.
     public ParserGenerator(Grammar g) {
         this.g = g;
         lexerGenerator = new LexerGenerator(g);
@@ -46,44 +45,78 @@ public class ParserGenerator {
         final String name = g.getName();
         final String capitalizedName = capitalize(g.getName());
         final String lexerName = capitalizedName + "Lexer";
+        final String package_ = name + "parser";
 
         StringBuilder res = new StringBuilder();
         res.append(String.format(
-                "package testparser;\n" +  // :TODO: fix it
-                        "\n" +
-                        "import grammar.domain.Grammar;\n" +
-                        "import testparser.exception.ParseException;\n" +   // :TODO: import corresponding package
-                        "\n" +
-                        "import java.util.ArrayList;\n" +
-                        "import java.util.List;\n" +
-                        "\n" +
-                        "public class %1$sParser {\n" +
-                        "    private %1$sLexer lexer;\n" +
-                        "\n" +
-                        "    public static class Node {\n" +
-                        "        private final String name;\n" +
-                        "        private final ArrayList<Node> ch = new ArrayList<>();\n" +
-                        "\n" +
-                        "        public Node(String name) {\n" +
-                        "            this.name = name;\n" +
-                        "        }\n" +
-                        "\n" +
-                        "        public String getName() {\n" +
-                        "            return name;\n" +
-                        "        }\n" +
-                        "\n" +
-                        "        public void addChild(Node node) {\n" +
-                        "            ch.add(node);\n" +
-                        "        }\n" +
-                        "\n" +
-                        "        public ArrayList<Node> getChildren() {\n" +
-                        "            return ch;\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public TestParser() {\n" +
-                        "    }\n\n",
-                capitalizedName
+                "package %2$s;\n" +
+                "\n" +
+                "import grammar.domain.Grammar;\n" +
+                "import %2$s.exception.ParseException;\n" +
+                "\n" +
+                "import java.util.ArrayList;\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "public class %1$sParser {\n" +
+                "    private %1$sLexer lexer;\n" +
+                "\n" +
+                "    public static class Node {\n" +
+                "        private final String name;\n" +
+                "        private final ArrayList<Node> ch = new ArrayList<>();\n" +
+                "\n" +
+                "        public Node(String name) {\n" +
+                "            this.name = name;\n" +
+                "        }\n" +
+                "\n" +
+                "        public String getName() {\n" +
+                "            return name;\n" +
+                "        }\n" +
+                "\n" +
+                "        public void addChild(Node node) {\n" +
+                "            ch.add(node);\n" +
+                "        }\n" +
+                "\n" +
+                "        public ArrayList<Node> getChildren() {\n" +
+                "            return ch;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+
+
+                "\tprivate static int ind;\n" +
+                "\tprivate static String getFillColor(%1$sParser.Node node) {\n" +
+                "\t\tString res = \"white\";\n" +
+                "\t\tif (node.getChildren().size() == 0) {\n" +
+                "\t\t\tres = \"darkgrey\";\n" +
+                "\t\t}\n" +
+                "\t\treturn res;\n" +
+                "\t}\n" +
+                "\n" +
+                "\tprivate static void buildGraph(%1$sParser.Node u, StringBuilder res) {\n" +
+                "\t\tString fillColor = getFillColor(u);\n" +
+                "\n" +
+                "\t\tres.append(ind).append(\" [label=\\\"\").append(u.getName()).append(\"\\\"\").append(\", style=filled\")\n" +
+                "\t\t\t\t.append(\", fillcolor=\").append(fillColor).append(\"]\");\n" +
+                "\t\tint curInd = ind++;\n" +
+                "\t\tfor (%1$sParser.Node ch : u.getChildren()) {\n" +
+                "\t\t\tres.append(\"\\n\");\n" +
+                "\t\t\tres.append(curInd).append(\" -> \").append(ind).append(';');\n" +
+                "\t\t\tres.append(\"\\n\");\n" +
+                "\t\t\tbuildGraph(ch, res);\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "\n" +
+                "\tpublic static String graphToStr(%1$sParser.Node root, String srcExpr) {\n" +
+                "\t\tind = 0;\n" +
+                "\t\tStringBuilder res = new StringBuilder(\"label = \\\"Parse tree\\n\" + srcExpr + \"\\\"\\n\");\n" +
+                "\t\tbuildGraph(root, res);\n" +
+                "\t\treturn res.toString();\n" +
+                "\t}\n" +
+
+
+                "    public %1$sParser() {\n" +
+                "    }\n\n",
+                capitalizedName, package_
         ));
 
         // node for each nonterm
@@ -145,9 +178,6 @@ public class ParserGenerator {
                     if (g.terminalsMap.containsKey(el.name)) {
                         Terminal ruleTerm = g.terminalsMap.get(el.name);
 
-                        // :TODO: EPS case
-                        // :TODO: case when there are no EPS in grammar ?
-
                         if (!checkEps(ruleTerm)) {
                             res.append(String.format(
 //                                "\t\t\t{\n" +
@@ -179,10 +209,11 @@ public class ParserGenerator {
                                 el.name, elInd, el.params
                         ));
 
-                        res.append(String.format(
+                        /*res.append(String.format(
                                 "\t\t\t\tres.addChild(%1$s());\n",
                                 el.name
-                                ));
+                                ));*/
+                        elInd++;
                     } else {
                         throw new RuntimeException("Not terminal and nonterminal in rule description");
                     }
@@ -192,7 +223,6 @@ public class ParserGenerator {
                                 el.code
                         ));
                     }
-                    elInd++;
                 }
                 res.append("\t\t\t\treturn res;\n");
                 res.append("\t\t\t}\n");
