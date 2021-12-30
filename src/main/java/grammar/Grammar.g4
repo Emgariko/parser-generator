@@ -62,7 +62,7 @@ nonterm_rule returns [Rule r] locals [String params, String code]
     })+;
 
 // :TODO: which parameters might be passed?
-rule_params returns[String s]:
+rule_params returns[String s] @init{ $s = new String(""); }:
     n1=NAME {$s += $n1.text;} (',' n2=NAME {$s += ", " + $n2.text;})*;
 
 rule_code returns[String s] locals[StringBuilder res]:

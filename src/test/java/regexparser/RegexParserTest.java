@@ -9,7 +9,7 @@ public class RegexParserTest {
 
     @Test()
     public void test() {
-        String test = "a|b(c)";
+        String test = "(a)|bc";
 
         RegexParser parser = new RegexParser();
 

@@ -1,28 +1,24 @@
-@grammar calculator;
+@grammar regex;
 
 @terminals
     EPS: "EPS";
     LB: "\\(";
     RB: "\\)";
-    PLUS: "\\+";
-    MINUS: "-";
-    MUL: "\\*";
-    DIV: "/";
-    DIGIT: "[0-9]+";
+    VBAR: "\\|";
+    L: "[a-zA-Z]";
+    STAR: "\\*";
 
-@start: e;
+@start: r;
 
 @rules
-    e returns [int x] : t e_ plus_op;
-    e_ returns [int x] : PLUS t e_ # res.x = n0.x + n1.x; # |
-        MINUS t e_ # res.x = n0.x - n1.x; # |
+    r: u r_;
+    r_: VBAR u r_ |
         EPS;
-    t returns [int x] : f t_[n0.x]  ;
-    t_[int left] returns [int x] : MUL f t_[ # res.x = n0.x * n1.x; # |
-        DIV f t_ # res.x = n0.x / n1.x; # |
-        EPS # res.x = left; #;
-    f returns [int x]: LB e RB # res.x = n0.x; # |
-        DIGIT # res.x = Integer.parseInt(lexer.getCurrentTokenString()); #
-
-    plus_op[int a, int b] returns[int x]: EPS # res.x
-    mul_op[int a, int b] returns[int x]: EPS # res.x = a * b; #
+    u: c u_;
+    u_: c u_ |
+        EPS;
+    c: k c_;
+    c_: STAR c_ |
+        EPS;
+    k: LB r RB |
+        L;

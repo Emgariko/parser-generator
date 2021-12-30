@@ -188,17 +188,31 @@ public class ParserGenerator {
                                     , lexerName, ruleTerm.getName()
                             ));
                             res.append(String.format(
-//                                "\t\t\t\tres.addChild(new Node(\"%1$s\"));\n",
-                                    "\t\t\t\tres.addChild(new Node(lexer.getCurToken().getValue()));\n" +
-                                    "\t\t\t\tlexer.nextToken();\n",
+                                    "\t\t\t\tres.addChild(new Node(lexer.getCurToken().getValue()));\n",
                                     ruleTerm.getName()
                             ));
+
+                            if (!el.code.isEmpty()) {
+                                res.append(String.format(
+                                        "\t\t\t\t%s\n",
+                                        el.code
+                                ));
+                            }
+
+                            res.append("\t\t\t\tlexer.nextToken();\n");
+
                         } else {
                             res.append(String.format(
 //                                "\t\t\t\tres.addChild(new Node(\"%1$s\"));\n",
                                     "\t\t\t\tres.addChild(new Node(\"EPS\"));\n",
                                     ruleTerm.getName()
                             ));
+                            if (!el.code.isEmpty()) {
+                                res.append(String.format(
+                                        "\t\t\t\t%s\n",
+                                        el.code
+                                ));
+                            }
                         }
                     } else if (g.nontermsMap.containsKey(el.name)) {
                         Nonterminal ruleNonterm = g.nontermsMap.get(el.name);
@@ -209,6 +223,13 @@ public class ParserGenerator {
                                 el.name, elInd, el.params
                         ));
 
+
+                        if (!el.code.isEmpty()) {
+                            res.append(String.format(
+                                    "\t\t\t\t%s\n",
+                                    el.code
+                            ));
+                        }
                         /*res.append(String.format(
                                 "\t\t\t\tres.addChild(%1$s());\n",
                                 el.name
@@ -216,12 +237,6 @@ public class ParserGenerator {
                         elInd++;
                     } else {
                         throw new RuntimeException("Not terminal and nonterminal in rule description");
-                    }
-                    if (!el.code.isEmpty()) {
-                        res.append(String.format(
-                                "\t\t\t\t%s\n",
-                                el.code
-                        ));
                     }
                 }
                 res.append("\t\t\t\treturn res;\n");
