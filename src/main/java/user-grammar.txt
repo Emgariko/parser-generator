@@ -1,24 +1,50 @@
-@grammar regex;
+@grammar calculator;
 
 @terminals
     EPS: "EPS";
     LB: "\\(";
     RB: "\\)";
-    VBAR: "\\|";
-    L: "[a-zA-Z]";
-    STAR: "\\*";
+    PLUS: "\\+";
+    MINUS: "-";
+    MUL: "\\*";
+    DIV: "/";
+    DIGIT: "[0-9]+";
+    EXCL: "!";
 
-@start: r;
+@start: e;
 
 @rules
-    r: u r_;
-    r_: VBAR u r_ |
-        EPS;
-    u: c u_;
-    u_: c u_ |
-        EPS;
-    c: k c_;
-    c_: STAR c_ |
-        EPS;
-    k: LB r RB |
-        L;
+    e returns [int x] : t # int left = r0.x; # e_[left]  # res.x = r1.x; #;
+    e_[int arg] returns [int x] :
+        PLUS t # int val = r0.x; # plus_op[arg, val] # int cur = r1.x; # e_[cur] # res.x = r2.x; # |
+        MINUS t # int val = r0.x; # minus_op[arg, val] # int cur = r1.x; # e_[cur] # res.x = r2.x; # |
+        EPS # res.x = arg; #;
+    t returns [int x] : fact # int left = r0.x; # t_[left]  # res.x = r1.x; #;
+    t_[int arg] returns [int x] :
+        MUL fact # int val = r0.x; # mul_op[arg, val] # int cur = r1.x; # t_[cur] # res.x = r2.x; # |
+            DIV fact # int val = r0.x; # div_op[arg, val] # int cur = r1.x; # t_[cur] # res.x = r2.x; # |
+            EPS # res.x = arg; #;
+
+    fact returns[int x] : f # int val = r0.x; # fact_[val] # res.x = r1.x; # ;
+
+    fact_[int arg] returns [int x]:
+    EXCL fact_op[arg] # int val = r0.x; # fact_[val] # res.x = r1.x; # |
+            EPS # res.x = arg; #;
+
+
+    f returns [int x]: LB e RB # res.x = r0.x; # |
+            DIGIT # res.x = Integer.parseInt(lexer.getCurToken().getValue()); #;
+
+    fact_op[int arg] returns[int x] : EPS
+    #
+        int result_ = 1;
+        for (int i_ = 2; i_ <= arg; i_++) {
+            result_ *= i_;
+        }
+        res.x = result_;
+    #;
+
+    plus_op[int a, int b] returns[int x]: EPS # res.x = a + b; #;
+    minus_op[int a, int b] returns[int x]: EPS # res.x = a - b; #;
+    mul_op[int a, int b] returns[int x]: EPS # res.x = a * b; #;
+    div_op[int a, int b] returns[int x]: EPS # res.x = a / b; #;

@@ -1,4 +1,3 @@
-/*
 package regexparser;
 
 import graphviz.GraphVizVisualizer;
@@ -21,4 +20,3 @@ public class RegexParserTest {
         }
     }
 }
-*/

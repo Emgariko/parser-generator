@@ -1,4 +1,3 @@
-/*
 package calculatorparser;
 
 import calculatorparser.exception.ParseException;
@@ -8,7 +7,8 @@ import org.junit.jupiter.api.Test;
 public class CalculatorParserTest {
     @Test
     public void test() {
-        String test = "4/2/1+(1+2+3)";
+        String test = "1+2+3!!";
+        String test1 = "(1+2+3)!";
 
         CalculatorParser parser = new CalculatorParser();
 
@@ -22,4 +22,3 @@ public class CalculatorParserTest {
         }
     }
 }
-*/

@@ -180,11 +180,9 @@ public class ParserGenerator {
 
                         if (!checkEps(ruleTerm)) {
                             res.append(String.format(
-//                                "\t\t\t{\n" +
                                     "\t\t\t\tif (lexer.getCurToken() != %1$s.Token.%2$s) {\n" +
                                             "\t\t\t\t\tthrow new ParseException(\"Expected another token.\");\n" +
                                             "\t\t\t\t}\n"
-//                                "\t\t\t}\n"
                                     , lexerName, ruleTerm.getName()
                             ));
                             res.append(String.format(
@@ -203,7 +201,6 @@ public class ParserGenerator {
 
                         } else {
                             res.append(String.format(
-//                                "\t\t\t\tres.addChild(new Node(\"%1$s\"));\n",
                                     "\t\t\t\tres.addChild(new Node(\"EPS\"));\n",
                                     ruleTerm.getName()
                             ));
@@ -230,10 +227,6 @@ public class ParserGenerator {
                                     el.code
                             ));
                         }
-                        /*res.append(String.format(
-                                "\t\t\t\tres.addChild(%1$s());\n",
-                                el.name
-                                ));*/
                         elInd++;
                     } else {
                         throw new RuntimeException("Not terminal and nonterminal in rule description");
